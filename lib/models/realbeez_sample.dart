@@ -20,7 +20,7 @@ class RealBeezSamples {
   static final List<PropertyItem> ownerListings = [
     PropertyItem(
       id: 'o1',
-      title: '2 BHK Apartment in HSR Layout',
+      title: '2 BHK Apartment Tim',
       location: 'Bengaluru',
       price: '₹72 L',
       imageUrl: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=1200&auto=format&fit=crop',
@@ -79,7 +79,7 @@ class RealBeezSamples {
     ),
     PropertyItem(
       id: 'v2',
-      title: '4 BHK Penthouse in Jubilee Hills',
+      title: '4 BHK Penthouse in Goa',
       location: 'Hyderabad',
       price: '₹4.2 Cr',
       imageUrl: 'https://images.unsplash.com/photo-1513584684374-8bab748fbf90?q=80&w=1200&auto=format&fit=crop',
@@ -106,7 +106,7 @@ class RealBeezSamples {
       title: '2 BHK in Whitefield',
       location: 'Bengaluru',
       price: '₹95 L',
-      imageUrl: 'https://images.unsplash.com/photo-1502005229762-cf1b2da7c9fb?q=80&w=1200&auto=format&fit=crop',
+      imageUrl: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=1200&auto=format&fit=crop',
       badge: 'Verified',
     ),
     PropertyItem(

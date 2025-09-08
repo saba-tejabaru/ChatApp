@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:real_beez/models/realbeez_sample.dart';
 import 'screens/realbeez/home_screen.dart';
 import 'screens/realbeez/emi_calculator_screen.dart';
 import 'screens/realbeez/placeholder_screens.dart';
