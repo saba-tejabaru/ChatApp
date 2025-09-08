@@ -76,12 +76,13 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
                 const SizedBox(height: 24),
                 Padding(
                   padding: pagePadding,
-                  child: _buildListingsSection(title: 'Owner Listings', items: RealBeezSamples.ownerListings),
-                ),
-                const SizedBox(height: 16),
-                Padding(
-                  padding: pagePadding,
-                  child: _buildListingsSection(title: 'Verified Listings', items: RealBeezSamples.verifiedListings),
+                  child: _buildListingsSection(
+                    title: 'Listings',
+                    items: [
+                      ...RealBeezSamples.ownerListings,
+                      ...RealBeezSamples.verifiedListings,
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Padding(
