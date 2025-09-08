@@ -34,6 +34,22 @@ class RealBeezSamples {
       imageUrl: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1200&auto=format&fit=crop',
       badge: 'Owner',
     ),
+    PropertyItem(
+      id: 'o3',
+      title: '2 BHK in Wakad',
+      location: 'Pune',
+      price: '₹82 L',
+      imageUrl: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1200&auto=format&fit=crop',
+      badge: 'Owner',
+    ),
+    PropertyItem(
+      id: 'o4',
+      title: '1 BHK near Gachibowli',
+      location: 'Hyderabad',
+      price: '₹52 L',
+      imageUrl: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=1200&auto=format&fit=crop',
+      badge: 'Owner',
+    ),
   ];
 
   static final List<PropertyItem> verifiedListings = [
@@ -53,6 +69,22 @@ class RealBeezSamples {
       imageUrl: 'https://images.unsplash.com/photo-1513584684374-8bab748fbf90?q=80&w=1200&auto=format&fit=crop',
       badge: 'Verified',
     ),
+    PropertyItem(
+      id: 'v3',
+      title: '2 BHK in Andheri East',
+      location: 'Mumbai',
+      price: '₹1.1 Cr',
+      imageUrl: 'https://images.unsplash.com/photo-1597047084897-51e81819a499?q=80&w=1200&auto=format&fit=crop',
+      badge: 'Verified',
+    ),
+    PropertyItem(
+      id: 'v4',
+      title: '3 BHK in Indiranagar',
+      location: 'Bengaluru',
+      price: '₹2.1 Cr',
+      imageUrl: 'https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1200&auto=format&fit=crop',
+      badge: 'Verified',
+    ),
   ];
 
   static final List<PropertyItem> newProjects = [
@@ -70,6 +102,22 @@ class RealBeezSamples {
       location: 'Whitefield, Bengaluru',
       price: '₹68 L onwards',
       imageUrl: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=1200&auto=format&fit=crop',
+      badge: 'New Project',
+    ),
+    PropertyItem(
+      id: 'n3',
+      title: 'Blue Meadows',
+      location: 'Panvel, Navi Mumbai',
+      price: '₹55 L onwards',
+      imageUrl: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c?q=80&w=1200&auto=format&fit=crop',
+      badge: 'New Project',
+    ),
+    PropertyItem(
+      id: 'n4',
+      title: 'Sunrise Heights',
+      location: 'Miyapur, Hyderabad',
+      price: '₹62 L onwards',
+      imageUrl: 'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?q=80&w=1200&auto=format&fit=crop',
       badge: 'New Project',
     ),
   ];

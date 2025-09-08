@@ -352,11 +352,11 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
         const SectionHeader(title: 'Tools Hub'),
         const SizedBox(height: 12),
         ResponsiveGridBuilder(
-          wideCrossAxisCount: 5,
-          narrowCrossAxisCount: 2,
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 1.1,
+          wideCrossAxisCount: 6,
+          narrowCrossAxisCount: 3,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 1.4,
           itemCount: tools.length,
           itemBuilder: (context, index) {
             final t = tools[index];
@@ -372,9 +372,9 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(t.icon, size: 28, color: RealBeezTheme.accent),
-                    const SizedBox(height: 8),
-                    Text(t.label, style: Theme.of(context).textTheme.bodyLarge, textAlign: TextAlign.center),
+                    Icon(t.icon, size: 22, color: RealBeezTheme.accent),
+                    const SizedBox(height: 6),
+                    Text(t.label, style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis),
                   ],
                 ),
               ),
