@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../widgets/common/metric_tile.dart';
 
 class EMICalculatorScreen extends StatefulWidget {
   const EMICalculatorScreen({super.key});
@@ -98,15 +99,23 @@ class _EMICalculatorScreenState extends State<EMICalculatorScreen> {
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    children: [
-                      _MetricTile(title: 'Monthly EMI', value: _formatCurrency(_emi!)),
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    final isWide = constraints.maxWidth > 600;
+                    final children = [
+                      Expanded(child: MetricTile(title: 'Monthly EMI', value: _formatCurrency(_emi!))),
                       const SizedBox(width: 16),
-                      _MetricTile(title: 'Total Interest', value: _formatCurrency(_totalInterest!)),
+                      Expanded(child: MetricTile(title: 'Total Interest', value: _formatCurrency(_totalInterest!))),
                       const SizedBox(width: 16),
-                      _MetricTile(title: 'Total Payment', value: _formatCurrency(_totalPayment!)),
-                    ],
-                  ),
+                      Expanded(child: MetricTile(title: 'Total Payment', value: _formatCurrency(_totalPayment!))),
+                    ];
+                    return isWide ? Row(children: children) : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      MetricTile(title: 'Monthly EMI', value: _formatCurrency(_emi!)),
+                      const SizedBox(height: 12),
+                      MetricTile(title: 'Total Interest', value: _formatCurrency(_totalInterest!)),
+                      const SizedBox(height: 12),
+                      MetricTile(title: 'Total Payment', value: _formatCurrency(_totalPayment!)),
+                    ]);
+                  }),
                 ),
               ),
               const SizedBox(height: 24),
@@ -145,26 +154,6 @@ class _EMICalculatorScreenState extends State<EMICalculatorScreen> {
   String _formatCurrency(double value) {
     // Simple formatting for INR, avoids intl dependency for now
     return '₹' + value.toStringAsFixed(0).replaceAllMapped(RegExp(r"\B(?=(\d{3})+(?!\d))"), (m) => ',');
-  }
-}
-
-class _MetricTile extends StatelessWidget {
-  final String title;
-  final String value;
-  const _MetricTile({required this.title, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: Theme.of(context).textTheme.bodyMedium),
-          const SizedBox(height: 6),
-          Text(value, style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Theme.of(context).colorScheme.secondary)),
-        ],
-      ),
-    );
   }
 }
 

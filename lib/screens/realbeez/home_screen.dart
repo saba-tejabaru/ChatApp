@@ -1,11 +1,13 @@
 import 'package:badges/badges.dart' as badges;
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../models/realbeez_sample.dart';
 import '../../theme/realbeez_theme.dart';
 import '../../widgets/realbeez/property_card.dart';
 import '../../widgets/realbeez/quick_tile.dart';
+import '../../widgets/common/section_header.dart';
+import '../../widgets/common/responsive_grid.dart';
+import '../../widgets/common/banner_carousel.dart';
 
 class RealBeezHomeScreen extends StatefulWidget {
   const RealBeezHomeScreen({super.key});
@@ -64,10 +66,7 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
                   child: _buildHeroSection(isWide),
                 ),
                 const SizedBox(height: 16),
-                Padding(
-                  padding: pagePadding,
-                  child: _buildSpotlightCarousel(),
-                ),
+                Padding(padding: pagePadding, child: _buildSpotlightCarousel()),
                 const SizedBox(height: 24),
                 Padding(
                   padding: pagePadding,
@@ -199,45 +198,19 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
     );
   }
 
-  Widget _buildSpotlightCarousel() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _sectionHeader('Spotlight'),
-        const SizedBox(height: 12),
-        CarouselSlider.builder(
-          itemCount: RealBeezSamples.spotlightBanners.length,
-          itemBuilder: (context, index, realIndex) {
-            final url = RealBeezSamples.spotlightBanners[index];
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.network(url, fit: BoxFit.cover),
-                  Positioned(
-                    left: 16,
-                    bottom: 16,
-                    child: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.download_rounded),
-                      label: const Text('Get the App'),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-          options: CarouselOptions(
+  Widget _buildSpotlightCarousel() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SectionHeader(title: 'Spotlight'),
+          const SizedBox(height: 12),
+          BannerCarousel(
+            imageUrls: RealBeezSamples.spotlightBanners,
             height: 180,
-            enlargeCenterPage: true,
-            autoPlay: true,
-            viewportFraction: 1,
+            ctaLabel: 'Get the App',
+            onCta: () {},
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 
   Widget _buildQuickAccess(bool isWide) {
     final tiles = [
@@ -276,17 +249,14 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionHeader('Quick Access'),
+        const SectionHeader('Quick Access'),
         const SizedBox(height: 12),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: isWide ? 3 : 1,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: isWide ? 3.2 : 3.6,
-          ),
+        ResponsiveGridBuilder(
+          wideCrossAxisCount: 3,
+          narrowCrossAxisCount: 1,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: isWide ? 3.2 : 3.6,
           itemCount: tiles.length,
           itemBuilder: (context, index) => tiles[index],
         ),
@@ -298,7 +268,7 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionHeader(title, trailing: TextButton(onPressed: () {}, child: const Text('See all'))),
+        SectionHeader(title: title, trailing: TextButton(onPressed: () {}, child: const Text('See all'))),
         const SizedBox(height: 12),
         SizedBox(
           height: 320,
@@ -325,17 +295,14 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionHeader('Tools Hub'),
+        const SectionHeader(title: 'Tools Hub'),
         const SizedBox(height: 12),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: isWide ? 5 : 2,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 1.1,
-          ),
+        ResponsiveGridBuilder(
+          wideCrossAxisCount: 5,
+          narrowCrossAxisCount: 2,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: 1.1,
           itemCount: tools.length,
           itemBuilder: (context, index) {
             final t = tools[index];
@@ -381,17 +348,14 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionHeader('Locality Reviews & Insights'),
+        const SectionHeader(title: 'Locality Reviews & Insights'),
         const SizedBox(height: 12),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: isWide ? 2 : 1,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 2.8,
-          ),
+        ResponsiveGridBuilder(
+          wideCrossAxisCount: 2,
+          narrowCrossAxisCount: 1,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: 2.8,
           itemCount: insights.length,
           itemBuilder: (context, index) {
             final i = insights[index];
@@ -447,40 +411,42 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionHeader('Your Activity'),
+        const SectionHeader(title: 'Your Activity'),
         const SizedBox(height: 12),
-        GridView(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: isWide ? 3 : 1,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: isWide ? 3.2 : 3.6,
-          ),
-          children: [
-            tile('Saved Properties', 'You have 2 saved homes', Icons.bookmark_outline_rounded, () {}),
-            tile('Recent Searches', 'HSR 2BHK • Powai 1BHK', Icons.history_rounded, () {}),
-            tile('Notifications', '3 new matches near you', Icons.notifications_outlined, () {}),
-          ],
+        ResponsiveGridBuilder(
+          wideCrossAxisCount: 3,
+          narrowCrossAxisCount: 1,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: isWide ? 3.2 : 3.6,
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            final items = [
+              tile('Saved Properties', 'You have 2 saved homes', Icons.bookmark_outline_rounded, () {}),
+              tile('Recent Searches', 'HSR 2BHK • Powai 1BHK', Icons.history_rounded, () {}),
+              tile('Notifications', '3 new matches near you', Icons.notifications_outlined, () {}),
+            ];
+            return items[index];
+          },
         ),
         const SizedBox(height: 24),
-        _sectionHeader('Extended Services'),
+        const SectionHeader(title: 'Extended Services'),
         const SizedBox(height: 12),
-        GridView(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: isWide ? 3 : 1,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: isWide ? 3.2 : 3.6,
-          ),
-          children: [
-            tile('Home Interiors', 'Design & execution experts', Icons.chair_outlined, () => Navigator.pushNamed(context, '/interiors')),
-            tile('Relocation & Tenant Finder', 'Hassle-free moving & tenants', Icons.local_shipping_outlined, () => Navigator.pushNamed(context, '/tenant_finder')),
-            tile('Utilities & Rent Payment', 'Pay bills & rent in-app', Icons.account_balance_wallet_outlined, () => Navigator.pushNamed(context, '/utilities')),
-          ],
+        ResponsiveGridBuilder(
+          wideCrossAxisCount: 3,
+          narrowCrossAxisCount: 1,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: isWide ? 3.2 : 3.6,
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            final items = [
+              tile('Home Interiors', 'Design & execution experts', Icons.chair_outlined, () => Navigator.pushNamed(context, '/interiors')),
+              tile('Relocation & Tenant Finder', 'Hassle-free moving & tenants', Icons.local_shipping_outlined, () => Navigator.pushNamed(context, '/tenant_finder')),
+              tile('Utilities & Rent Payment', 'Pay bills & rent in-app', Icons.account_balance_wallet_outlined, () => Navigator.pushNamed(context, '/utilities')),
+            ];
+            return items[index];
+          },
         ),
       ],
     );
@@ -526,14 +492,7 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
     );
   }
 
-  Widget _sectionHeader(String title, {Widget? trailing}) {
-    return Row(
-      children: [
-        Expanded(child: Text(title, style: Theme.of(context).textTheme.headlineMedium)),
-        if (trailing != null) trailing,
-      ],
-    );
-  }
+  // Section header now provided by SectionHeader common widget
 }
 
 class _ToolItem {
