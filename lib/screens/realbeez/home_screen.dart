@@ -74,7 +74,15 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
                   child: _buildQuickAccess(isWide),
                 ),
                 const SizedBox(height: 24),
-                Padding(padding: pagePadding, child: _buildListingsCombined()),
+                Padding(
+                  padding: pagePadding,
+                  child: _buildListingsSection(title: 'Owner Listings', items: RealBeezSamples.ownerListings),
+                ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: pagePadding,
+                  child: _buildListingsSection(title: 'Verified Listings', items: RealBeezSamples.verifiedListings),
+                ),
                 const SizedBox(height: 16),
                 Padding(
                   padding: pagePadding,
@@ -287,59 +295,7 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
     );
   }
 
-  Widget _buildListingsCombined() {
-    return DefaultTabController(
-      length: 2,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: const [
-              Expanded(child: SectionHeader(title: 'Listings')),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFE2E8F0)),
-            ),
-            child: const TabBar(
-              labelColor: Colors.black,
-              tabs: [
-                Tab(text: 'Owner'),
-                Tab(text: 'Verified'),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            height: 340,
-            child: TabBarView(
-              children: [
-                _buildHorizontalCarousel(RealBeezSamples.ownerListings),
-                _buildHorizontalCarousel(RealBeezSamples.verifiedListings),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHorizontalCarousel(List<PropertyItem> items) {
-    return CarouselSlider.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index, realIdx) => PropertyCard(item: items[index]),
-      options: CarouselOptions(
-        height: 320,
-        autoPlay: true,
-        enlargeCenterPage: true,
-        viewportFraction: 0.7,
-      ),
-    );
-  }
+  // removed combined listings and carousel variant per user request
 
   Widget _buildToolsHub(bool isWide) {
     final List<_ToolItem> tools = [
