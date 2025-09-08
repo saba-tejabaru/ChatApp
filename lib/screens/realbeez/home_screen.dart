@@ -23,6 +23,16 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
   String _selectedCity = 'Bengaluru';
   final TextEditingController _searchController = TextEditingController();
 
+  List<PropertyItem> _interleaveListings(List<PropertyItem> a, List<PropertyItem> b) {
+    final int maxLen = a.length > b.length ? a.length : b.length;
+    final List<PropertyItem> result = [];
+    for (int i = 0; i < maxLen; i++) {
+      if (i < a.length) result.add(a[i]);
+      if (i < b.length) result.add(b[i]);
+    }
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,10 +88,7 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
                   padding: pagePadding,
                   child: _buildListingsSection(
                     title: 'Listings',
-                    items: [
-                      ...RealBeezSamples.ownerListings,
-                      ...RealBeezSamples.verifiedListings,
-                    ],
+                    items: _interleaveListings(RealBeezSamples.ownerListings, RealBeezSamples.verifiedListings),
                   ),
                 ),
                 const SizedBox(height: 16),
