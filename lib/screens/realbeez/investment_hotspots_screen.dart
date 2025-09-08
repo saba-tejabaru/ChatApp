@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../widgets/common/metric_tile.dart';
 
 class InvestmentHotspotsScreen extends StatelessWidget {
   const InvestmentHotspotsScreen({super.key});
@@ -12,26 +13,59 @@ class InvestmentHotspotsScreen extends StatelessWidget {
     ];
     return Scaffold(
       appBar: AppBar(title: const Text('Investment Hotspots')),
-      body: ListView.separated(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
-        itemCount: hotspots.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          final h = hotspots[index];
-          return Card(
-            child: ListTile(
-              title: Text('${h.area}, ${h.city}'),
-              subtitle: Text(h.rationale),
-              trailing: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('5y CAGR'),
-                  Text('${h.cagr.toStringAsFixed(1)}%'),
-                ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: LayoutBuilder(builder: (context, constraints) {
+                  final avgCagr = hotspots.map((e) => e.cagr).reduce((a, b) => a + b) / hotspots.length;
+                  final isWide = constraints.maxWidth > 600;
+                  final tiles = [
+                    Expanded(child: MetricTile(title: 'Avg CAGR (5y)', value: '${avgCagr.toStringAsFixed(1)}%')),
+                    const SizedBox(width: 16),
+                    Expanded(child: MetricTile(title: 'Top City', value: hotspots.first.city)),
+                    const SizedBox(width: 16),
+                    Expanded(child: MetricTile(title: 'Hotspots', value: hotspots.length.toString())),
+                  ];
+                  return isWide ? Row(children: tiles) : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    MetricTile(title: 'Avg CAGR (5y)', value: '${avgCagr.toStringAsFixed(1)}%'),
+                    const SizedBox(height: 12),
+                    MetricTile(title: 'Top City', value: hotspots.first.city),
+                    const SizedBox(height: 12),
+                    MetricTile(title: 'Hotspots', value: hotspots.length.toString()),
+                  ]);
+                }),
               ),
             ),
-          );
-        },
+            const SizedBox(height: 12),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: hotspots.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                final h = hotspots[index];
+                return Card(
+                  child: ListTile(
+                    title: Text('${h.area}, ${h.city}'),
+                    subtitle: Text(h.rationale),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('5y CAGR'),
+                        Text('${h.cagr.toStringAsFixed(1)}%'),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
