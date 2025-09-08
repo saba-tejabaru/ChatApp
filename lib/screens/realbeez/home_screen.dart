@@ -270,15 +270,27 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
       children: [
         SectionHeader(title: title, trailing: TextButton(onPressed: () {}, child: const Text('See all'))),
         const SizedBox(height: 12),
-        SizedBox(
-          height: 320,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: items.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
-            itemBuilder: (context, index) => PropertyCard(item: items[index]),
-          ),
-        ),
+        LayoutBuilder(builder: (context, c) {
+          final isNarrow = c.maxWidth < 700;
+          if (isNarrow) {
+            return ListView.separated(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: items.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, index) => PropertyCard(item: items[index]),
+            );
+          }
+          return SizedBox(
+            height: 320,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: items.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 12),
+              itemBuilder: (context, index) => PropertyCard(item: items[index]),
+            ),
+          );
+        }),
       ],
     );
   }
@@ -366,7 +378,7 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
                     borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), bottomLeft: Radius.circular(16)),
                     child: Stack(
                       children: [
-                        Image.network(i.thumbnail, width: 220, height: double.infinity, fit: BoxFit.cover),
+                        Image.network(i.thumbnail, width: isWide ? 220 : 140, height: isWide ? double.infinity : 120, fit: BoxFit.cover),
                         const Positioned.fill(child: Center(child: Icon(Icons.play_circle_fill_rounded, size: 48, color: Colors.white))),
                       ],
                     ),
@@ -381,7 +393,7 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
                           Text(i.title, style: Theme.of(context).textTheme.titleLarge),
                           const SizedBox(height: 8),
                           Text(i.description, style: Theme.of(context).textTheme.bodyMedium),
-                          const Spacer(),
+                          const SizedBox(height: 8),
                           Wrap(
                             spacing: 8,
                             children: const [
@@ -462,13 +474,13 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
           Wrap(
             spacing: 16,
             runSpacing: 12,
-            children: const [
-              _FooterLink('Help Center'),
-              _FooterLink('Blogs'),
-              _FooterLink('Research'),
-              _FooterLink('Legal'),
-              _FooterLink('Owner Listings'),
-              _FooterLink('New Projects'),
+            children: [
+              _FooterLink('Help Center', onTap: () => Navigator.pushNamed(context, '/help_center')),
+              _FooterLink('Blogs', onTap: () => Navigator.pushNamed(context, '/blogs')),
+              _FooterLink('Research', onTap: () => Navigator.pushNamed(context, '/research')),
+              _FooterLink('Legal', onTap: () => Navigator.pushNamed(context, '/legal')),
+              _FooterLink('Owner Listings', onTap: () => Navigator.pushNamed(context, '/owner_listings')),
+              _FooterLink('New Projects', onTap: () => Navigator.pushNamed(context, '/new_projects')),
             ],
           ),
           const SizedBox(height: 12),
@@ -511,10 +523,11 @@ class _InsightItem {
 
 class _FooterLink extends StatelessWidget {
   final String label;
-  const _FooterLink(this.label);
+  final VoidCallback? onTap;
+  const _FooterLink(this.label, {this.onTap});
   @override
   Widget build(BuildContext context) {
-    return TextButton(onPressed: () {}, child: Text(label));
+    return TextButton(onPressed: onTap, child: Text(label));
   }
 }
 
