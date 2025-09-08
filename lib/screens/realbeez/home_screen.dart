@@ -249,7 +249,7 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SectionHeader('Quick Access'),
+        const SectionHeader(title: 'Quick Access'),
         const SizedBox(height: 12),
         ResponsiveGridBuilder(
           wideCrossAxisCount: 3,
