@@ -50,6 +50,22 @@ class RealBeezSamples {
       imageUrl: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=1200&auto=format&fit=crop',
       badge: 'Owner',
     ),
+    PropertyItem(
+      id: 'o5',
+      title: '3 BHK in Noida Sec 150',
+      location: 'Noida',
+      price: '₹1.35 Cr',
+      imageUrl: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=1200&auto=format&fit=crop',
+      badge: 'Owner',
+    ),
+    PropertyItem(
+      id: 'o6',
+      title: '2 BHK near Kondapur',
+      location: 'Hyderabad',
+      price: '₹78 L',
+      imageUrl: 'https://images.unsplash.com/photo-1499914485622-a88fac536970?q=80&w=1200&auto=format&fit=crop',
+      badge: 'Owner',
+    ),
   ];
 
   static final List<PropertyItem> verifiedListings = [
@@ -85,6 +101,22 @@ class RealBeezSamples {
       imageUrl: 'https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1200&auto=format&fit=crop',
       badge: 'Verified',
     ),
+    PropertyItem(
+      id: 'v5',
+      title: '2 BHK in Whitefield',
+      location: 'Bengaluru',
+      price: '₹95 L',
+      imageUrl: 'https://images.unsplash.com/photo-1502005229762-cf1b2da7c9fb?q=80&w=1200&auto=format&fit=crop',
+      badge: 'Verified',
+    ),
+    PropertyItem(
+      id: 'v6',
+      title: '1 BHK in Khar West',
+      location: 'Mumbai',
+      price: '₹1.35 Cr',
+      imageUrl: 'https://images.unsplash.com/photo-1459535653751-d571815e906b?q=80&w=1200&auto=format&fit=crop',
+      badge: 'Verified',
+    ),
   ];
 
   static final List<PropertyItem> newProjects = [
@@ -118,6 +150,22 @@ class RealBeezSamples {
       location: 'Miyapur, Hyderabad',
       price: '₹62 L onwards',
       imageUrl: 'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?q=80&w=1200&auto=format&fit=crop',
+      badge: 'New Project',
+    ),
+    PropertyItem(
+      id: 'n5',
+      title: 'Palm View Residences',
+      location: 'Golf Course Ext., Gurgaon',
+      price: '₹1.25 Cr onwards',
+      imageUrl: 'https://images.unsplash.com/photo-1428908728789-d2de25dbd4e2?q=80&w=1200&auto=format&fit=crop',
+      badge: 'New Project',
+    ),
+    PropertyItem(
+      id: 'n6',
+      title: 'Willow Springs',
+      location: 'Kondhwa, Pune',
+      price: '₹78 L onwards',
+      imageUrl: 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=1200&auto=format&fit=crop',
       badge: 'New Project',
     ),
   ];

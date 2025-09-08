@@ -329,11 +329,15 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
   }
 
   Widget _buildHorizontalCarousel(List<PropertyItem> items) {
-    return ListView.separated(
-      scrollDirection: Axis.horizontal,
+    return CarouselSlider.builder(
       itemCount: items.length,
-      separatorBuilder: (_, __) => const SizedBox(width: 12),
-      itemBuilder: (context, index) => PropertyCard(item: items[index]),
+      itemBuilder: (context, index, realIdx) => PropertyCard(item: items[index]),
+      options: CarouselOptions(
+        height: 320,
+        autoPlay: true,
+        enlargeCenterPage: true,
+        viewportFraction: 0.7,
+      ),
     );
   }
 
