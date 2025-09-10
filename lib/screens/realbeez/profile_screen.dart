@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_store.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -9,26 +10,35 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Profile')),
       body: ListView(
         children: [
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                CircleAvatar(radius: 28, child: Text('RB')),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Guest User', style: Theme.of(context).textTheme.titleLarge),
-                      const SizedBox(height: 4),
-                      Text('Sign in for a faster 45‑min match', style: Theme.of(context).textTheme.bodyMedium),
-                    ],
-                  ),
+          ValueListenableBuilder<AuthUser?>(
+            valueListenable: AuthStore.instance.currentUser,
+            builder: (context, user, _) {
+              final bool signedIn = user != null;
+              return Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    CircleAvatar(radius: 28, child: Text(signedIn ? user!.name.substring(0, 1).toUpperCase() : 'RB')),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(signedIn ? user!.name : 'Guest User', style: Theme.of(context).textTheme.titleLarge),
+                          const SizedBox(height: 4),
+                          Text(signedIn ? user!.phone : 'Sign in for a faster 45‑min match', style: Theme.of(context).textTheme.bodyMedium),
+                        ],
+                      ),
+                    ),
+                    if (!signedIn)
+                      TextButton(onPressed: () => Navigator.pushNamed(context, '/login'), child: const Text('Sign in'))
+                    else
+                      TextButton(onPressed: () => AuthStore.instance.signOut(), child: const Text('Sign out')),
+                  ],
                 ),
-                TextButton(onPressed: () {}, child: const Text('Sign in')),
-              ],
-            ),
+              );
+            },
           ),
           const SizedBox(height: 8),
           _SectionHeader('My Activity'),
@@ -51,7 +61,13 @@ class ProfileScreen extends StatelessWidget {
           _SectionHeader('Settings'),
           _Tile(icon: Icons.translate_outlined, title: 'Language'),
           _Tile(icon: Icons.location_on_outlined, title: 'Preferred City'),
-          _Tile(icon: Icons.logout, title: 'Sign out'),
+          ValueListenableBuilder<AuthUser?>(
+            valueListenable: AuthStore.instance.currentUser,
+            builder: (context, user, _) {
+              if (user == null) return const SizedBox.shrink();
+              return _Tile(icon: Icons.logout, title: 'Sign out', onTap: () => AuthStore.instance.signOut());
+            },
+          ),
         ],
       ),
     );
@@ -74,7 +90,8 @@ class _SectionHeader extends StatelessWidget {
 class _Tile extends StatelessWidget {
   final IconData icon;
   final String title;
-  const _Tile({required this.icon, required this.title});
+  final VoidCallback? onTap;
+  const _Tile({required this.icon, required this.title, this.onTap});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -83,7 +100,7 @@ class _Tile extends StatelessWidget {
         leading: Icon(icon),
         title: Text(title),
         trailing: const Icon(Icons.chevron_right),
-        onTap: () {},
+        onTap: onTap,
       ),
     );
   }

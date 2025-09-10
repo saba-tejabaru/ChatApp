@@ -9,6 +9,7 @@ import 'screens/realbeez/rates_trends_screen.dart';
 import 'screens/realbeez/investment_hotspots_screen.dart';
 import 'screens/realbeez/ai_assistant_screen.dart';
 import 'screens/realbeez/main_scaffold.dart';
+import 'screens/realbeez/login_screen.dart';
 import 'screens/realbeez/help_center_screen.dart';
 import 'screens/realbeez/blogs_screen.dart';
 import 'screens/realbeez/research_screen.dart';
@@ -30,6 +31,7 @@ class RealBeezApp extends StatelessWidget {
       routes: {
         '/': (_) => const MainScaffold(),
         '/emi_calculator': (_) => const EMICalculatorScreen(),
+        '/login': (_) => const LoginScreen(),
         '/post_property': (_) => const PlaceholderPage(title: 'Post Property Free', description: 'List your property with photos, details, and reach verified buyers or tenants.'),
         '/rent_agreement': (_) => const PlaceholderPage(title: 'Rent Agreement / Legal Docs', description: 'Get legally vetted rent agreements and other property documents.'),
         '/home_services': (_) => const PlaceholderPage(title: 'Home Services', description: 'Packers & movers, repairs, cleaning, painting and more.'),
