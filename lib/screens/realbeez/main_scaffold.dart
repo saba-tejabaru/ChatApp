@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
 import 'home_screen.dart';
 import 'ai_assistant_screen.dart';
-import 'placeholder_screens.dart';
+import 'profile_screen.dart';
 
 class MainScaffold extends StatefulWidget {
   const MainScaffold({super.key});
@@ -18,7 +18,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     DashboardScreen(),
     RealBeezHomeScreen(),
     AIAssistantScreen(),
-    PlaceholderPage(title: 'Profile', description: 'Manage your account and preferences'),
+    ProfileScreen(),
   ];
 
   @override

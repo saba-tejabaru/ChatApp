@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../services/ai_store.dart';
 
 class AIAssistantScreen extends StatefulWidget {
   const AIAssistantScreen({super.key});
@@ -9,18 +10,15 @@ class AIAssistantScreen extends StatefulWidget {
 
 class _AIAssistantScreenState extends State<AIAssistantScreen> {
   final TextEditingController _controller = TextEditingController();
-  final List<_Message> _messages = [
-    const _Message(role: 'ai', text: 'Hi! I am Beezy. Looking to buy, rent, or sell? I can help with prices, areas, EMIs, and more.'),
-  ];
+  final store = AIAssistantStore.instance;
 
   void _send() {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
-    setState(() {
-      _messages.add(_Message(role: 'user', text: text));
-      _messages.add(_Message(role: 'ai', text: _respond(text)));
-      _controller.clear();
-    });
+    store.addUser(text);
+    store.addAI(_respond(text));
+    _controller.clear();
+    setState(() {});
   }
 
   String _respond(String input) {
@@ -53,24 +51,29 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(12),
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final m = _messages[index];
-                final isUser = m.role == 'user';
-                return Align(
-                  alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 6),
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: isUser ? const Color(0xFFDCFCE7) : Colors.white,
-                      border: Border.all(color: const Color(0xFFE2E8F0)),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(m.text),
-                  ),
+            child: ValueListenableBuilder<List<AIMessage>>(
+              valueListenable: store.messages,
+              builder: (context, msgs, _) {
+                return ListView.builder(
+                  padding: const EdgeInsets.all(12),
+                  itemCount: msgs.length,
+                  itemBuilder: (context, index) {
+                    final m = msgs[index];
+                    final isUser = m.role == 'user';
+                    return Align(
+                      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: isUser ? const Color(0xFFDCFCE7) : Colors.white,
+                          border: Border.all(color: const Color(0xFFE2E8F0)),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(m.text),
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -96,11 +99,5 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
       ),
     );
   }
-}
-
-class _Message {
-  final String role;
-  final String text;
-  const _Message({required this.role, required this.text});
 }
 
