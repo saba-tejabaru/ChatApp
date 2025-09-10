@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:real_beez/models/realbeez_sample.dart';
 import 'screens/realbeez/home_screen.dart';
 import 'screens/realbeez/emi_calculator_screen.dart';
@@ -17,7 +18,13 @@ import 'screens/realbeez/legal_screen.dart';
 import 'screens/realbeez/listings_list_screen.dart';
 import 'theme/realbeez_theme.dart';
 
-void main() => runApp(const RealBeezApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp();
+  } catch (_) {}
+  runApp(const RealBeezApp());
+}
 
 class RealBeezApp extends StatelessWidget {
   const RealBeezApp({super.key});

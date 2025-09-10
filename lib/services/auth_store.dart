@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'otp_provider.dart';
 
 class AuthUser {
   final String name;
@@ -13,9 +14,9 @@ class AuthStore {
 
   final ValueNotifier<AuthUser?> currentUser = ValueNotifier<AuthUser?>(null);
   String? _pendingPhone;
-  String? _otpCode;
-  DateTime? _otpExpiry;
+  String? _verificationId;
   bool _otpVerified = false;
+  OtpProvider? otpProvider;
 
   void signIn({required String name, required String phone, required String city}) {
     currentUser.value = AuthUser(name: name, phone: phone, city: city);
@@ -25,18 +26,26 @@ class AuthStore {
     currentUser.value = null;
   }
 
-  void requestOtp(String phone) {
+  Future<void> requestOtp(String phone) async {
     _pendingPhone = phone;
-    // Demo OTP code. In production, call SMS gateway and do not store OTP in memory.
-    _otpCode = '123456';
-    _otpExpiry = DateTime.now().add(const Duration(minutes: 5));
     _otpVerified = false;
+    if (otpProvider == null) {
+      // fallback demo provider behavior
+      _verificationId = 'demo';
+      return;
+    }
+    await otpProvider!.sendOtp(phone, onCodeSent: (id) => _verificationId = id, onAutoVerified: () => _otpVerified = true, onFailed: (_) {});
   }
 
-  bool verifyOtp(String code) {
-    if (_otpCode == null || _pendingPhone == null || _otpExpiry == null) return false;
-    if (DateTime.now().isAfter(_otpExpiry!)) return false;
-    final ok = code.trim() == _otpCode;
+  Future<bool> verifyOtp(String code) async {
+    if (_pendingPhone == null) return false;
+    if (otpProvider == null) {
+      final ok = code.trim() == '123456';
+      _otpVerified = ok;
+      return ok;
+    }
+    if (_verificationId == null) return false;
+    final ok = await otpProvider!.verifyOtp(_verificationId!, code);
     _otpVerified = ok;
     return ok;
   }
@@ -46,8 +55,7 @@ class AuthStore {
     signIn(name: name, phone: _pendingPhone!, city: city);
     // Clear pending OTP state post-signin
     _pendingPhone = null;
-    _otpCode = null;
-    _otpExpiry = null;
+    _verificationId = null;
     _otpVerified = false;
     return true;
   }
