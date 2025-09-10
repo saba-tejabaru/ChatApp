@@ -1,3 +1,4 @@
+// Conditionally import web support types to avoid build errors where web libs are absent
 import 'package:firebase_auth/firebase_auth.dart';
 import 'otp_provider.dart';
 

@@ -30,3 +30,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+dependency_overrides:
+  firebase_auth_web: 5.7.4
