@@ -25,10 +25,12 @@ Future<void> main() async {
   try {
     await Firebase.initializeApp();
   } catch (_) {}
-  // Wire Firebase OTP provider if Firebase init succeeded
+  // Wire Firebase OTP provider only if running on platforms with configured Firebase
   try {
     AuthStore.instance.otpProvider = FirebaseOtpProvider();
-  } catch (_) {}
+  } catch (_) {
+    // Fallback to demo OTP remains active
+  }
   runApp(const RealBeezApp());
 }
 
