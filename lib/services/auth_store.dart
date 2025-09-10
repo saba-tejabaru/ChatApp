@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-// Auth without external providers; demo OTP removed
+// Auth without external providers; demo OTP (code: 123456)
 
 class AuthUser {
   final String name;
@@ -28,12 +28,16 @@ class AuthStore {
 
   Future<void> requestOtp(String phone) async {
     _pendingPhone = phone;
-    _otpVerified = true; // instantly verified since OTP flow is removed
-    _verificationId = null;
+    _otpVerified = false;
+    _verificationId = 'demo';
   }
 
   Future<bool> verifyOtp(String code) async {
-    return _pendingPhone != null; // OTP step skipped
+    if (_pendingPhone == null) return false;
+    if (_verificationId == null) return false;
+    final bool ok = code.trim() == '123456';
+    _otpVerified = ok;
+    return ok;
   }
 
   bool completeProfileAndSignIn({required String name, required String city}) {
