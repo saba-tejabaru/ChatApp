@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../services/quick_match_store.dart';
+import '../../services/nav_store.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -50,11 +52,13 @@ class _QuickMatchCard extends StatelessWidget {
             const SizedBox(height: 6),
             const Text('Answer 3 questions. We’ll find matching properties instantly.'),
             const SizedBox(height: 12),
+            _Dropdowns(),
+            const SizedBox(height: 12),
             SizedBox(
               width: 180,
               child: ElevatedButton(
-                onPressed: () => _startQuickMatch(context),
-                child: const Text('Start'),
+                onPressed: () => _goExplore(context),
+                child: const Text('Find Properties'),
               ),
             ),
           ],
@@ -63,57 +67,60 @@ class _QuickMatchCard extends StatelessWidget {
     );
   }
 
-  void _startQuickMatch(BuildContext context) async {
-    String? city = await _ask(context, 'Which city?');
-    if (city == null) return;
-    String? purpose = await _ask(context, 'Buy or Rent?');
-    if (purpose == null) return;
-    String? budget = await _ask(context, 'Budget (₹)?');
-    if (budget == null) return;
+  void _goExplore(BuildContext context) {
+    final qs = QuickMatchStore.instance;
+    if (qs.city.value == null || qs.purpose.value == null || qs.budget.value == null) return;
+    // Set bottom nav to Explore (index 1) and navigate if needed
+    NavStore.instance.selectedIndex.value = 1;
+  }
+}
 
-    // Show simple result sheet
-    // In a real app, kick off background matching and push results screen
-    // within seconds while continuing to fetch more.
-    // Here we just acknowledge.
-    // ignore: use_build_context_synchronously
-    showModalBottomSheet(
-      context: context,
-      builder: (_) => Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Finding matches...', style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 8),
-            Text('City: $city'),
-            Text('Purpose: $purpose'),
-            Text('Budget: ₹$budget'),
-            const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
-            )
-          ],
+class _Dropdowns extends StatefulWidget {
+  @override
+  State<_Dropdowns> createState() => _DropdownsState();
+}
+
+class _DropdownsState extends State<_Dropdowns> {
+  final qs = QuickMatchStore.instance;
+  final List<String> cities = const ['Bengaluru', 'Mumbai', 'Pune', 'Hyderabad', 'Delhi'];
+  final List<String> purposes = const ['Buy', 'Rent'];
+  final List<String> budgets = const ['5000000', '8000000', '12000000', '20000000'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: DropdownButtonFormField<String>(
+            value: qs.city.value,
+            items: cities.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+            onChanged: (v) => setState(() => qs.set(cityValue: v)),
+            decoration: const InputDecoration(labelText: 'City'),
+          ),
         ),
-      ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: DropdownButtonFormField<String>(
+            value: qs.purpose.value,
+            items: purposes.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+            onChanged: (v) => setState(() => qs.set(purposeValue: v)),
+            decoration: const InputDecoration(labelText: 'Purpose'),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: DropdownButtonFormField<String>(
+            value: qs.budget.value,
+            items: budgets.map((c) => DropdownMenuItem(value: c, child: Text('₹${_fmt(c)}'))).toList(),
+            onChanged: (v) => setState(() => qs.set(budgetValue: v)),
+            decoration: const InputDecoration(labelText: 'Budget'),
+          ),
+        ),
+      ],
     );
   }
 
-  Future<String?> _ask(BuildContext context, String question) async {
-    final TextEditingController c = TextEditingController();
-    return showDialog<String>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text(question),
-        content: TextField(controller: c, autofocus: true),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-          ElevatedButton(onPressed: () => Navigator.pop(context, c.text.trim()), child: const Text('Next')),
-        ],
-      ),
-    );
-  }
+  String _fmt(String v) => v.replaceAllMapped(RegExp(r"\B(?=(\d{3})+(?!\d))"), (m) => ',');
 }
 
 class _SimpleGrid extends StatelessWidget {

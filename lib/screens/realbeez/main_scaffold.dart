@@ -3,6 +3,8 @@ import 'dashboard_screen.dart';
 import 'home_screen.dart';
 import 'ai_assistant_screen.dart';
 import 'profile_screen.dart';
+import '../../services/nav_store.dart';
+import 'explore_screen.dart';
 
 class MainScaffold extends StatefulWidget {
   const MainScaffold({super.key});
@@ -16,25 +18,31 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   final List<Widget> _pages = const [
     DashboardScreen(),
-    RealBeezHomeScreen(),
+    ExploreScreen(),
     AIAssistantScreen(),
     ProfileScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_index],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _index,
-        onDestinationSelected: (i) => setState(() => _index = i),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.dashboard_outlined), selectedIcon: Icon(Icons.dashboard), label: 'Dashboard'),
-          NavigationDestination(icon: Icon(Icons.explore_outlined), selectedIcon: Icon(Icons.explore), label: 'Explore'),
-          NavigationDestination(icon: Icon(Icons.smart_toy_outlined), selectedIcon: Icon(Icons.smart_toy), label: 'Beezy AI'),
-          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profile'),
-        ],
-      ),
+    return ValueListenableBuilder<int>(
+      valueListenable: NavStore.instance.selectedIndex,
+      builder: (context, v, _) {
+        _index = v;
+        return Scaffold(
+          body: _pages[_index],
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: _index,
+            onDestinationSelected: (i) => NavStore.instance.selectedIndex.value = i,
+            destinations: const [
+              NavigationDestination(icon: Icon(Icons.dashboard_outlined), selectedIcon: Icon(Icons.dashboard), label: 'Dashboard'),
+              NavigationDestination(icon: Icon(Icons.explore_outlined), selectedIcon: Icon(Icons.explore), label: 'Explore'),
+              NavigationDestination(icon: Icon(Icons.smart_toy_outlined), selectedIcon: Icon(Icons.smart_toy), label: 'Beezy AI'),
+              NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profile'),
+            ],
+          ),
+        );
+      },
     );
   }
 }
