@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'otp_provider.dart';
+// Auth without external providers; demo OTP removed
 
 class AuthUser {
   final String name;
@@ -16,7 +16,7 @@ class AuthStore {
   String? _pendingPhone;
   String? _verificationId;
   bool _otpVerified = false;
-  OtpProvider? otpProvider;
+  // No external OTP provider
 
   void signIn({required String name, required String phone, required String city}) {
     currentUser.value = AuthUser(name: name, phone: phone, city: city);
@@ -28,26 +28,12 @@ class AuthStore {
 
   Future<void> requestOtp(String phone) async {
     _pendingPhone = phone;
-    _otpVerified = false;
-    if (otpProvider == null) {
-      // fallback demo provider behavior
-      _verificationId = 'demo';
-      return;
-    }
-    await otpProvider!.sendOtp(phone, onCodeSent: (id) => _verificationId = id, onAutoVerified: () => _otpVerified = true, onFailed: (_) {});
+    _otpVerified = true; // instantly verified since OTP flow is removed
+    _verificationId = null;
   }
 
   Future<bool> verifyOtp(String code) async {
-    if (_pendingPhone == null) return false;
-    if (otpProvider == null) {
-      final ok = code.trim() == '123456';
-      _otpVerified = ok;
-      return ok;
-    }
-    if (_verificationId == null) return false;
-    final ok = await otpProvider!.verifyOtp(_verificationId!, code);
-    _otpVerified = ok;
-    return ok;
+    return _pendingPhone != null; // OTP step skipped
   }
 
   bool completeProfileAndSignIn({required String name, required String city}) {

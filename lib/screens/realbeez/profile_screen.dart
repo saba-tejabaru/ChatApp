@@ -32,7 +32,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                     if (!signedIn)
-                      TextButton(onPressed: () => Navigator.pushNamed(context, '/login'), child: const Text('Sign in'))
+                      const SizedBox.shrink()
                     else
                       TextButton(onPressed: () => AuthStore.instance.signOut(), child: const Text('Sign out')),
                   ],
