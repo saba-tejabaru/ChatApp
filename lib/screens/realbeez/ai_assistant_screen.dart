@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/ai_store.dart';
+import '../../services/ai_rules.dart';
 
 class AIAssistantScreen extends StatefulWidget {
   const AIAssistantScreen({super.key});
@@ -16,33 +17,15 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
     store.addUser(text);
-    store.addAI(_respond(text));
+    final reply = AIRules.respond(text);
+    if (reply.isNotEmpty) {
+      store.addAI(reply);
+    }
     _controller.clear();
     setState(() {});
   }
 
-  String _respond(String input) {
-    final lower = input.toLowerCase();
-    if (lower.contains('emi') || lower.contains('loan')) {
-      return 'You can estimate EMIs in Tools > Home Loan & EMI. Typical rates ~8-9% p.a. Want me to open it?';
-    }
-    if (lower.contains('2 bhk') || lower.contains('2bhk')) {
-      return '2 BHK options around ₹70L–₹1.1Cr depending on city. Any preferred area and budget?';
-    }
-    if (lower.contains('rent') && lower.contains('hsr')) {
-      return 'HSR Layout rents for 2 BHK are ~₹28k–₹42k/month depending on block and furnishing.';
-    }
-    if (lower.contains('best area') || lower.contains('which area')) {
-      return 'For IT commute in Bengaluru: HSR, Sarjapur Rd, Whitefield. For Mumbai: Powai, Andheri East. What city and budget?';
-    }
-    if (lower.contains('sell')) {
-      return 'To sell, list your property (Post Property Free). Verified photos, correct price, and paperwork speed up sales.';
-    }
-    if (lower.contains('trend') || lower.contains('price')) {
-      return 'Check Tools > Rates & Trends for micro-market price charts. Which city/locality should I check?';
-    }
-    return 'Got it. Could you share city, locality, budget, and BHK? I can suggest options and tools.';
-  }
+  // Rule-based replies moved to AIRules
 
   @override
   Widget build(BuildContext context) {
