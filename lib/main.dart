@@ -11,6 +11,8 @@ import 'screens/realbeez/investment_hotspots_screen.dart';
 import 'screens/realbeez/ai_assistant_screen.dart';
 import 'screens/realbeez/main_scaffold.dart';
 import 'screens/realbeez/login_screen.dart';
+import 'services/firebase_otp_provider.dart';
+import 'services/auth_store.dart';
 import 'screens/realbeez/help_center_screen.dart';
 import 'screens/realbeez/blogs_screen.dart';
 import 'screens/realbeez/research_screen.dart';
@@ -22,6 +24,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
     await Firebase.initializeApp();
+  } catch (_) {}
+  // Wire Firebase OTP provider if Firebase init succeeded
+  try {
+    AuthStore.instance.otpProvider = FirebaseOtpProvider();
   } catch (_) {}
   runApp(const RealBeezApp());
 }
