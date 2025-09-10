@@ -7,6 +7,7 @@ import 'screens/realbeez/interior_estimator_screen.dart';
 import 'screens/realbeez/propworth_screen.dart';
 import 'screens/realbeez/rates_trends_screen.dart';
 import 'screens/realbeez/investment_hotspots_screen.dart';
+import 'screens/realbeez/ai_assistant_screen.dart';
 import 'screens/realbeez/help_center_screen.dart';
 import 'screens/realbeez/blogs_screen.dart';
 import 'screens/realbeez/research_screen.dart';
@@ -38,6 +39,7 @@ class RealBeezApp extends StatelessWidget {
         '/interiors': (_) => const PlaceholderPage(title: 'Home Interiors', description: 'Design to delivery with curated partners.'),
         '/tenant_finder': (_) => const PlaceholderPage(title: 'Relocation + Tenant Finder', description: 'Relocation assistance and tenant matchmaking.'),
         '/utilities': (_) => const PlaceholderPage(title: 'Utilities & Rent Payment', description: 'Pay rent and utilities seamlessly.'),
+        '/ai_assistant': (_) => const AIAssistantScreen(),
         '/help_center': (_) => const HelpCenterScreen(),
         '/blogs': (_) => const BlogsScreen(),
         '/research': (_) => const ResearchScreen(),

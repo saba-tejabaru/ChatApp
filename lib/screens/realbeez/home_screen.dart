@@ -37,29 +37,9 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            badges.Badge(
-              position: badges.BadgePosition.topEnd(top: -2, end: -4),
-              badgeContent: const SizedBox(),
-              showBadge: true,
-              child: Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: RealBeezTheme.primary,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Center(
-                  child: Text('RB', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800)),
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            const Text('Real Beez'),
-          ],
-        ),
+        title: const Text('Real Beez'),
         actions: [
+          IconButton(onPressed: () => Navigator.pushNamed(context, '/ai_assistant'), icon: const Icon(Icons.smart_toy_outlined)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_outlined)),
           const SizedBox(width: 8),
         ],
@@ -123,21 +103,16 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
 
   Widget _buildHeroSection(bool isWide) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(colors: [Color(0xFFFFF7E6), Color(0xFFEFF6FF)]),
-        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFE2E8F0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('One Platform for Buy, Rent, Sell, Finance, Interiors & More.', style: Theme.of(context).textTheme.headlineLarge),
-          const SizedBox(height: 8),
-          Text(
-            'Discover verified properties, calculate EMIs, get interiors, and manage everything end-to-end.',
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
+          Text('Find your next home', style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 16),
           _buildSearchBar(isWide),
         ],
