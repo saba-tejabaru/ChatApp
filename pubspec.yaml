@@ -20,8 +20,6 @@ dependencies:
   flutter_svg: ^2.0.10+1
   cached_network_image: ^3.3.1
   badges: ^3.1.2
-  firebase_core: ^2.24.2
-  firebase_auth: ^4.16.0
 
 dev_dependencies:
   flutter_test:
@@ -32,4 +30,3 @@ flutter:
   uses-material-design: true
 
 dependency_overrides:
-  firebase_auth_web: 5.7.4
