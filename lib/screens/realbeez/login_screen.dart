@@ -173,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _verifyOtp() {
     if (!_otpKey.currentState!.validate()) return;
     final ok = AuthStore.instance.verifyOtp(_otp.text.trim());
-    if (ok) {
+    if (ok == true) {
       setState(() => _step = 2);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalid or expired OTP')));
