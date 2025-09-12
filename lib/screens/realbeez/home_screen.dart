@@ -304,6 +304,93 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
     );
   }
 
+  Widget _buildJsonPropertyCard(Map<String, dynamic> item) {
+    return SizedBox(
+      width: 280,
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                Image.network(
+                  item['imageUrl'] as String,
+                  height: 160,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+                Positioned(
+                  top: 12,
+                  left: 12,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.verified, color: Colors.white, size: 16),
+                        const SizedBox(width: 6),
+                        Text(
+                          item['badge'] as String, 
+                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600)
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item['title'] as String, 
+                    style: Theme.of(context).textTheme.titleLarge, 
+                    maxLines: 2, 
+                    overflow: TextOverflow.ellipsis
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      const Icon(Icons.location_on_outlined, size: 16, color: RealBeezTheme.textSecondary),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          item['location'] as String,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    item['price'] as String, 
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(color: RealBeezTheme.accent)
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      ElevatedButton(onPressed: () {}, child: const Text('View Details')),
+                      const SizedBox(width: 8),
+                      OutlinedButton(onPressed: () {}, child: const Text('Save')),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildListingsSection({required String title, required List<Map<String, dynamic>> items}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,7 +405,7 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
               shrinkWrap: true,
               itemCount: items.length,
               separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, index) => PropertyCard(item: items[index]),
+              itemBuilder: (context, index) => _buildJsonPropertyCard(items[index]),
             );
           }
           return SizedBox(
@@ -327,7 +414,7 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
               scrollDirection: Axis.horizontal,
               itemCount: items.length,
               separatorBuilder: (_, __) => const SizedBox(width: 12),
-              itemBuilder: (context, index) => PropertyCard(item: items[index]),
+              itemBuilder: (context, index) => _buildJsonPropertyCard(items[index]),
             ),
           );
         }),
