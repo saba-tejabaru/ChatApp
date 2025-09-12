@@ -2,7 +2,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../models/realbeez_sample.dart';
+import '../../services/realbeez_data_service.dart';
 import '../../theme/realbeez_theme.dart';
 import '../../widgets/realbeez/property_card.dart';
 import '../../widgets/realbeez/quick_tile.dart';
@@ -68,13 +68,13 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
                   padding: pagePadding,
                   child: _buildListingsSection(
                     title: 'Listings',
-                    items: _interleaveListings(RealBeezSamples.ownerListings, RealBeezSamples.verifiedListings),
+                    items: _interleaveListings(RealBeezDataService.instance.ownerListings, RealBeezDataService.instance.verifiedListings),
                   ),
                 ),
                 const SizedBox(height: 16),
                 Padding(
                   padding: pagePadding,
-                  child: _buildListingsSection(title: 'New Projects', items: RealBeezSamples.newProjects),
+                  child: _buildListingsSection(title: 'New Projects', items: RealBeezDataService.instance.newProjects),
                 ),
                 const SizedBox(height: 24),
                 Padding(
@@ -187,7 +187,7 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
           const SectionHeader(title: 'Spotlight'),
           const SizedBox(height: 12),
           BannerCarousel(
-            imageUrls: RealBeezSamples.spotlightBanners,
+            imageUrls: RealBeezDataService.instance.spotlightBanners,
             height: 180,
             ctaLabel: 'Get the App',
             onCta: () {},

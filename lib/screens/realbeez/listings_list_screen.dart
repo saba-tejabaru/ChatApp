@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/realbeez_sample.dart';
+import '../../services/realbeez_data_service.dart';
 import '../../widgets/realbeez/property_card.dart';
 
 class ListingsListScreen extends StatelessWidget {

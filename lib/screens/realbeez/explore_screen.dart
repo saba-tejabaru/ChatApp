@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/realbeez_sample.dart';
+import '../../services/realbeez_data_service.dart';
 import '../../services/quick_match_store.dart';
 import '../../widgets/realbeez/property_card.dart';
 
@@ -15,8 +16,8 @@ class ExploreScreen extends StatelessWidget {
 
     // Filter helper: choose owner+verified for Buy; for Rent, we reuse verified list (as example)
     List<PropertyItem> base = [
-      ...RealBeezSamples.ownerListings,
-      ...RealBeezSamples.verifiedListings,
+      ...RealBeezDataService.instance.ownerListings,
+      ...RealBeezDataService.instance.verifiedListings,
     ];
     // In a real app, separate rent samples; here we filter by keywords and price bands
     List<PropertyItem> filtered = base.where((p) {
