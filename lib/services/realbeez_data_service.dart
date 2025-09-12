@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import '../models/realbeez_sample.dart';
+import '../models/property_item.dart';
 
 class RealBeezDataService {
   static RealBeezDataService? _instance;

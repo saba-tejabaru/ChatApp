@@ -15,6 +15,3 @@ class PropertyItem {
     required this.badge,
   });
 }
-
-// Note: Static data has been moved to realbeez_sample.json
-// Use RealBeezDataService.instance to access the data

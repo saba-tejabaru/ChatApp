@@ -2,6 +2,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../models/property_item.dart';
 import '../../services/realbeez_data_service.dart';
 import '../../theme/realbeez_theme.dart';
 import '../../widgets/realbeez/property_card.dart';

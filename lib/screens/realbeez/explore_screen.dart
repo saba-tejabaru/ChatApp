@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../models/realbeez_sample.dart';
+import '../../models/property_item.dart';
 import '../../services/realbeez_data_service.dart';
 import '../../services/quick_match_store.dart';
 import '../../widgets/realbeez/property_card.dart';

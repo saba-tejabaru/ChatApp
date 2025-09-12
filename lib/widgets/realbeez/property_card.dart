@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import '../../models/realbeez_sample.dart';
+import '../../models/property_item.dart';
 import '../../theme/realbeez_theme.dart';
 
 class PropertyCard extends StatelessWidget {
