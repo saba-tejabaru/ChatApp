@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:real_beez/services/realbeez_data_service.dart';
+import 'services/realbeez_data_service.dart';
 //import 'screens/realbeez/home_screen.dart';
 import 'screens/realbeez/emi_calculator_screen.dart';
 import 'screens/realbeez/placeholder_screens.dart';
@@ -21,7 +21,7 @@ import 'theme/realbeez_theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize the RealBeez data service
+  // Initialize the RealBeez data service for listing screens
   await RealBeezDataService.instance.initialize();
   
   runApp(const RealBeezApp());

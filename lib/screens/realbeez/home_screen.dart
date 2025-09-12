@@ -1,9 +1,10 @@
+import 'dart:convert';
 import 'package:badges/badges.dart' as badges;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../models/property_item.dart';
-import '../../services/realbeez_data_service.dart';
 import '../../theme/realbeez_theme.dart';
 import '../../widgets/realbeez/property_card.dart';
 import '../../widgets/realbeez/quick_tile.dart';
@@ -23,6 +24,70 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
   int _selectedModeIndex = 0;
   String _selectedCity = 'Bengaluru';
   final TextEditingController _searchController = TextEditingController();
+  
+  // JSON data variables
+  List<PropertyItem> _ownerListings = [];
+  List<PropertyItem> _verifiedListings = [];
+  List<PropertyItem> _newProjects = [];
+  List<String> _spotlightBanners = [];
+  bool _isDataLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadJsonData();
+  }
+
+  Future<void> _loadJsonData() async {
+    try {
+      final String jsonString = await rootBundle.loadString('realbeez_sample.json');
+      final Map<String, dynamic> jsonData = json.decode(jsonString);
+      
+      // Extract data from JSON structure
+      final classesData = jsonData['classes'] as Map<String, dynamic>;
+      final realBeezSamplesData = classesData['RealBeezSamples'] as Map<String, dynamic>;
+      final collectionsData = realBeezSamplesData['collections'] as Map<String, dynamic>;
+      
+      // Parse owner listings
+      final ownerListingsData = collectionsData['ownerListings'] as Map<String, dynamic>;
+      _ownerListings = _parsePropertyItems(ownerListingsData['items'] as List<dynamic>);
+      
+      // Parse verified listings
+      final verifiedListingsData = collectionsData['verifiedListings'] as Map<String, dynamic>;
+      _verifiedListings = _parsePropertyItems(verifiedListingsData['items'] as List<dynamic>);
+      
+      // Parse new projects
+      final newProjectsData = collectionsData['newProjects'] as Map<String, dynamic>;
+      _newProjects = _parsePropertyItems(newProjectsData['items'] as List<dynamic>);
+      
+      // Parse spotlight banners
+      final spotlightBannersData = collectionsData['spotlightBanners'] as Map<String, dynamic>;
+      _spotlightBanners = List<String>.from(spotlightBannersData['items'] as List<dynamic>);
+      
+      setState(() {
+        _isDataLoaded = true;
+      });
+    } catch (e) {
+      print('Error loading JSON data: $e');
+      setState(() {
+        _isDataLoaded = true; // Still set to true to show UI with empty data
+      });
+    }
+  }
+
+  List<PropertyItem> _parsePropertyItems(List<dynamic> itemsData) {
+    return itemsData.map((item) {
+      final Map<String, dynamic> itemMap = item as Map<String, dynamic>;
+      return PropertyItem(
+        id: itemMap['id'] as String,
+        title: itemMap['title'] as String,
+        location: itemMap['location'] as String,
+        price: itemMap['price'] as String,
+        imageUrl: itemMap['imageUrl'] as String,
+        badge: itemMap['badge'] as String,
+      );
+    }).toList();
+  }
 
   List<PropertyItem> _interleaveListings(List<PropertyItem> a, List<PropertyItem> b) {
     final int maxLen = a.length > b.length ? a.length : b.length;
@@ -36,6 +101,12 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_isDataLoaded) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Real Beez'),
@@ -69,13 +140,13 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
                   padding: pagePadding,
                   child: _buildListingsSection(
                     title: 'Listings',
-                    items: _interleaveListings(RealBeezDataService.instance.ownerListings, RealBeezDataService.instance.verifiedListings),
+                    items: _interleaveListings(_ownerListings, _verifiedListings),
                   ),
                 ),
                 const SizedBox(height: 16),
                 Padding(
                   padding: pagePadding,
-                  child: _buildListingsSection(title: 'New Projects', items: RealBeezDataService.instance.newProjects),
+                  child: _buildListingsSection(title: 'New Projects', items: _newProjects),
                 ),
                 const SizedBox(height: 24),
                 Padding(
@@ -188,7 +259,7 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
           const SectionHeader(title: 'Spotlight'),
           const SizedBox(height: 12),
           BannerCarousel(
-            imageUrls: RealBeezDataService.instance.spotlightBanners,
+            imageUrls: _spotlightBanners,
             height: 180,
             ctaLabel: 'Get the App',
             onCta: () {},
