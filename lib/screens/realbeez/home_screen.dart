@@ -4,9 +4,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../models/property_item.dart';
 import '../../theme/realbeez_theme.dart';
-import '../../widgets/realbeez/property_card.dart';
+// import '../../widgets/realbeez/property_card.dart'; // Not needed - using raw JSON
 import '../../widgets/realbeez/quick_tile.dart';
 import '../../widgets/common/section_header.dart';
 import '../../widgets/common/responsive_grid.dart';
@@ -25,10 +24,10 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
   String _selectedCity = 'Bengaluru';
   final TextEditingController _searchController = TextEditingController();
   
-  // JSON data variables
-  List<PropertyItem> _ownerListings = [];
-  List<PropertyItem> _verifiedListings = [];
-  List<PropertyItem> _newProjects = [];
+  // Raw JSON data variables
+  List<Map<String, dynamic>> _ownerListings = [];
+  List<Map<String, dynamic>> _verifiedListings = [];
+  List<Map<String, dynamic>> _newProjects = [];
   List<String> _spotlightBanners = [];
   bool _isDataLoaded = false;
 
@@ -48,17 +47,17 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
       final realBeezSamplesData = classesData['RealBeezSamples'] as Map<String, dynamic>;
       final collectionsData = realBeezSamplesData['collections'] as Map<String, dynamic>;
       
-      // Parse owner listings
+      // Parse owner listings - keep as raw JSON
       final ownerListingsData = collectionsData['ownerListings'] as Map<String, dynamic>;
-      _ownerListings = _parsePropertyItems(ownerListingsData['items'] as List<dynamic>);
+      _ownerListings = List<Map<String, dynamic>>.from(ownerListingsData['items'] as List<dynamic>);
       
-      // Parse verified listings
+      // Parse verified listings - keep as raw JSON
       final verifiedListingsData = collectionsData['verifiedListings'] as Map<String, dynamic>;
-      _verifiedListings = _parsePropertyItems(verifiedListingsData['items'] as List<dynamic>);
+      _verifiedListings = List<Map<String, dynamic>>.from(verifiedListingsData['items'] as List<dynamic>);
       
-      // Parse new projects
+      // Parse new projects - keep as raw JSON
       final newProjectsData = collectionsData['newProjects'] as Map<String, dynamic>;
-      _newProjects = _parsePropertyItems(newProjectsData['items'] as List<dynamic>);
+      _newProjects = List<Map<String, dynamic>>.from(newProjectsData['items'] as List<dynamic>);
       
       // Parse spotlight banners
       final spotlightBannersData = collectionsData['spotlightBanners'] as Map<String, dynamic>;
@@ -75,23 +74,9 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
     }
   }
 
-  List<PropertyItem> _parsePropertyItems(List<dynamic> itemsData) {
-    return itemsData.map((item) {
-      final Map<String, dynamic> itemMap = item as Map<String, dynamic>;
-      return PropertyItem(
-        id: itemMap['id'] as String,
-        title: itemMap['title'] as String,
-        location: itemMap['location'] as String,
-        price: itemMap['price'] as String,
-        imageUrl: itemMap['imageUrl'] as String,
-        badge: itemMap['badge'] as String,
-      );
-    }).toList();
-  }
-
-  List<PropertyItem> _interleaveListings(List<PropertyItem> a, List<PropertyItem> b) {
+  List<Map<String, dynamic>> _interleaveListings(List<Map<String, dynamic>> a, List<Map<String, dynamic>> b) {
     final int maxLen = a.length > b.length ? a.length : b.length;
-    final List<PropertyItem> result = [];
+    final List<Map<String, dynamic>> result = [];
     for (int i = 0; i < maxLen; i++) {
       if (i < a.length) result.add(a[i]);
       if (i < b.length) result.add(b[i]);
@@ -319,7 +304,7 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
     );
   }
 
-  Widget _buildListingsSection({required String title, required List<PropertyItem> items}) {
+  Widget _buildListingsSection({required String title, required List<Map<String, dynamic>> items}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
