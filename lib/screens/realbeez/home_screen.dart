@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:badges/badges.dart' as badges;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../theme/realbeez_theme.dart';
 // import '../../widgets/realbeez/property_card.dart'; // Not needed - using raw JSON
@@ -34,44 +34,39 @@ class _RealBeezHomeScreenState extends State<RealBeezHomeScreen> {
   @override
   void initState() {
     super.initState();
-    _loadJsonData();
+    readJson();
   }
 
-  Future<void> _loadJsonData() async {
-    try {
-      final String jsonString = await rootBundle.loadString('realbeez_sample.json');
-      final Map<String, dynamic> jsonData = json.decode(jsonString);
-      
-      // Extract data from JSON structure
-      final classesData = jsonData['classes'] as Map<String, dynamic>;
-      final realBeezSamplesData = classesData['RealBeezSamples'] as Map<String, dynamic>;
-      final collectionsData = realBeezSamplesData['collections'] as Map<String, dynamic>;
-      
-      // Parse owner listings - keep as raw JSON
-      final ownerListingsData = collectionsData['ownerListings'] as Map<String, dynamic>;
-      _ownerListings = List<Map<String, dynamic>>.from(ownerListingsData['items'] as List<dynamic>);
-      
-      // Parse verified listings - keep as raw JSON
-      final verifiedListingsData = collectionsData['verifiedListings'] as Map<String, dynamic>;
-      _verifiedListings = List<Map<String, dynamic>>.from(verifiedListingsData['items'] as List<dynamic>);
-      
-      // Parse new projects - keep as raw JSON
-      final newProjectsData = collectionsData['newProjects'] as Map<String, dynamic>;
-      _newProjects = List<Map<String, dynamic>>.from(newProjectsData['items'] as List<dynamic>);
-      
-      // Parse spotlight banners
-      final spotlightBannersData = collectionsData['spotlightBanners'] as Map<String, dynamic>;
-      _spotlightBanners = List<String>.from(spotlightBannersData['items'] as List<dynamic>);
-      
-      setState(() {
-        _isDataLoaded = true;
-      });
-    } catch (e) {
-      print('Error loading JSON data: $e');
-      setState(() {
-        _isDataLoaded = true; // Still set to true to show UI with empty data
-      });
-    }
+  Future<void> readJson() async {
+    final String response = await rootBundle.loadString('realbeez_sample.json');
+    final data = await json.decode(response);
+    // Now 'data' contains your parsed JSON data
+    print(data);
+    
+    // Extract data from JSON structure
+    final classesData = data['classes'] as Map<String, dynamic>;
+    final realBeezSamplesData = classesData['RealBeezSamples'] as Map<String, dynamic>;
+    final collectionsData = realBeezSamplesData['collections'] as Map<String, dynamic>;
+    
+    // Parse owner listings - keep as raw JSON
+    final ownerListingsData = collectionsData['ownerListings'] as Map<String, dynamic>;
+    _ownerListings = List<Map<String, dynamic>>.from(ownerListingsData['items'] as List<dynamic>);
+    
+    // Parse verified listings - keep as raw JSON
+    final verifiedListingsData = collectionsData['verifiedListings'] as Map<String, dynamic>;
+    _verifiedListings = List<Map<String, dynamic>>.from(verifiedListingsData['items'] as List<dynamic>);
+    
+    // Parse new projects - keep as raw JSON
+    final newProjectsData = collectionsData['newProjects'] as Map<String, dynamic>;
+    _newProjects = List<Map<String, dynamic>>.from(newProjectsData['items'] as List<dynamic>);
+    
+    // Parse spotlight banners
+    final spotlightBannersData = collectionsData['spotlightBanners'] as Map<String, dynamic>;
+    _spotlightBanners = List<String>.from(spotlightBannersData['items'] as List<dynamic>);
+    
+    setState(() {
+      _isDataLoaded = true;
+    });
   }
 
   List<Map<String, dynamic>> _interleaveListings(List<Map<String, dynamic>> a, List<Map<String, dynamic>> b) {
